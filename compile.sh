@@ -11,7 +11,7 @@ export USE_CCACHE=1
 
 target="$1"
 
-number="0.91"
+number="0.92"
 
 scheduler="BFS"
 
