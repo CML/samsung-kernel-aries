@@ -65,16 +65,6 @@ struct tl2796_gamma_reg_offsets {
 	s16 v[3][6];
 };
 
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-typedef enum {
-	BACKLIGHT_LEVEL_OFF	= 0,
-	BACKLIGHT_LEVEL_DIMMING	= 1,
-	BACKLIGHT_LEVEL_NORMAL	= 6
-} backlight_level_t;
-
-backlight_level_t backlight_level = BACKLIGHT_LEVEL_OFF;
-#endif*/
-
 struct s5p_lcd{
 	int ldi_enable;
 	int bl;
@@ -470,9 +460,6 @@ static void tl2796_ldi_disable(struct s5p_lcd *lcd)
 
 static int s5p_bl_update_status(struct backlight_device *bd)
 {
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-    backlight_level = BACKLIGHT_LEVEL_OFF;
-#endif*/
 	struct s5p_lcd *lcd = bl_get_data(bd);
 	int bl = bd->props.brightness;
 
@@ -925,14 +912,6 @@ return sprintf(buf, "%u\n", lcd_->color_mult[0]);
 #ifdef CONFIG_FB_VOODOO
 static ssize_t red_multiplier_original_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-    if(bl == 0)
-            backlight_level = BACKLIGHT_LEVEL_OFF;	//lcd off
-    else if((bl < 30) && (bl > 0))
-            backlight_level = BACKLIGHT_LEVEL_DIMMING;	//dimming
-    else
-            backlight_level = BACKLIGHT_LEVEL_NORMAL;	//normal
-#endif*/
 	return sprintf(buf, "%u\n", original_color_adj_mults[0]);
 }
 #endif
