@@ -367,16 +367,14 @@ struct clocksource clocksource_s5p = {
 
 static void s5p_init_clocksource(unsigned long rate)
 {
-	static char err[] __initdata = KERN_ERR
-			"%s: can't register clocksource!\n";
-
 	clocksource_s5p.mult
 		= clocksource_khz2mult(rate/1000, clocksource_s5p.shift);
 
 	s5p_sched_timer_start(~0, 1);
 
 	if (clocksource_register(&clocksource_s5p))
-		printk(err, clocksource_s5p.name);
+		printk(KERN_ERR
+			"%s: can't register clocksource!\n", clocksource_s5p.name);
 }
 
 /*
@@ -468,7 +466,7 @@ static void s5p_tick_timer_setup(void)
 	s5p_tick_timer_start((rate / HZ) - 1, 1);
 }
 
-static void __init s5p_timer_init(void)
+static void s5p_timer_init(void)
 {
 
 	/* clock configuration setting and enable */

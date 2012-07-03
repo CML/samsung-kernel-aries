@@ -398,7 +398,6 @@ static struct s3cfb_lcd s6e63m0 = {
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC1 (11264 * SZ_1K)
 
 #else
-
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0 (11264 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC2 (11264 * SZ_1K)
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_MFC0 (14336 * SZ_1K)
@@ -411,10 +410,6 @@ static struct s3cfb_lcd s6e63m0 = {
 						  CONFIG_FB_S3C_NUM_BUF_OVLY_WIN)))
 
 #define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_JPEG (4092 * SZ_1K)
-//#define  S5PV210_ANDROID_PMEM_MEMSIZE_PMEM (2048 * SZ_1K)
-//#define  S5PV210_ANDROID_PMEM_MEMSIZE_PMEM_GPU1 (3000 * SZ_1K)
-//#define  S5PV210_ANDROID_PMEM_MEMSIZE_PMEM_ADSP (1500 * SZ_1K)
-//#define  S5PV210_VIDEO_SAMSUNG_MEMSIZE_TEXTSTREAM (3000 * SZ_1K)
 
 static struct s5p_media_device aries_media_devs[] = {
 	[0] = {
@@ -438,17 +433,6 @@ static struct s5p_media_device aries_media_devs[] = {
 		.memsize = S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC0,
 		.paddr = 0,
 	},
-
-/*
-	[3] = {
-
-		.id = S5P_MDEV_FIMC1,
-		.name = "fimc1",
-		.bank = 1,
-		.memsize = S5PV210_VIDEO_SAMSUNG_MEMSIZE_FIMC1,
-		.paddr = 0,
-	},
-*/
 	[4] = {
 		.id = S5P_MDEV_FIMC2,
 		.name = "fimc2",
@@ -514,7 +498,6 @@ static struct s5pv210_cpufreq_voltage smdkc110_cpufreq_volt[] = {
 
 		.freq	= 1300000,
 		.varm	= DVSARM2,
-
 		.vint	= DVSINT2,
 	}, {
 
@@ -1573,12 +1556,11 @@ static void set_shared_mic_bias(void)
 #else
     gpio_set_value(GPIO_MICBIAS_EN, wm8994_mic_bias || jack_mic_bias);
 
-#ifdef CONFIG_SAMSUNG_FASCINATE
-    gpio_set_value(GPIO_EARPATH_SEL, 0);
-#else
-    gpio_set_value(GPIO_EARPATH_SEL, jack_mic_bias);
-#endif
-
+	#ifdef CONFIG_SAMSUNG_FASCINATE
+		gpio_set_value(GPIO_EARPATH_SEL, 0);
+	#else
+		gpio_set_value(GPIO_EARPATH_SEL, jack_mic_bias);
+	#endif
 #endif
 }
 
@@ -1778,7 +1760,7 @@ static int ce147_ldo_en(bool en)
 		goto off;
 	}
 	udelay(50);
-	
+
 	/* Turn CAM_SENSOR_A_2.8V(VDDA) on */
 	gpio_set_value(GPIO_GPB7, 1);
 	mdelay(1);
@@ -1845,7 +1827,7 @@ static int ce147_power_on(void)
 			pr_err("Failed to initialize camera regulators\n");
 			return -EINVAL;
 	}
-	
+
 	ce147_init();
 
 	/* CAM_VGA_nSTBY - GPB(0)  */
@@ -1865,7 +1847,7 @@ static int ce147_power_on(void)
 
 		return err;
 	}
-	
+
 	ce147_ldo_en(TRUE);
 
 	mdelay(1);
@@ -1927,10 +1909,10 @@ static int ce147_power_off(void)
 
 	/* CAM_IO_EN - GPB(7) */
 	err = gpio_request(GPIO_GPB7, "GPB7");
-	
+
 	if(err) {
 		printk(KERN_ERR "failed to request GPB7 for camera control\n");
-	
+
 		return err;
 	}
 
@@ -1939,16 +1921,16 @@ static int ce147_power_off(void)
 
 	if(err) {
 		printk(KERN_ERR "failed to request GPJ0 for camera control\n");
-	
+
 		return err;
 	}
 
 	/* CAM_MEGA_nRST - GPJ1(5) */
 	err = gpio_request(GPIO_CAM_MEGA_nRST, "GPJ1");
-	
+
 	if(err) {
 		printk(KERN_ERR "failed to request GPJ1 for camera control\n");
-	
+
 		return err;
 	}
 
@@ -1978,26 +1960,26 @@ static int ce147_power_off(void)
 
 	// CAM_VGA_nRST  LOW		
 	gpio_direction_output(GPIO_CAM_VGA_nRST, 1);
-	
+
 	gpio_set_value(GPIO_CAM_VGA_nRST, 0);
 
 	mdelay(1);
 
 	// CAM_MEGA_nRST - GPJ1(5) LOW
 	gpio_direction_output(GPIO_CAM_MEGA_nRST, 1);
-	
+
 	gpio_set_value(GPIO_CAM_MEGA_nRST, 0);
-	
+
 	mdelay(1);
 
 	// Mclk disable
 	s3c_gpio_cfgpin(GPIO_CAM_MCLK, 0);
-	
+
 	mdelay(1);
 
 	// CAM_MEGA_EN - GPJ0(6) LOW
 	gpio_direction_output(GPIO_CAM_MEGA_EN, 1);
-	
+
 	gpio_set_value(GPIO_CAM_MEGA_EN, 0);
 
 	mdelay(1);
@@ -2005,7 +1987,7 @@ static int ce147_power_off(void)
 	ce147_ldo_en(FALSE);
 
 	mdelay(1);
-	
+
 	gpio_free(GPIO_CAM_MEGA_EN);
 	gpio_free(GPIO_CAM_MEGA_nRST);
 	gpio_free(GPIO_CAM_VGA_nRST);
@@ -2064,7 +2046,7 @@ static int smdkc110_cam1_power(int onoff)
 	}
 
 	gpio_direction_output(S5PV210_GPB(0), 0);
-	
+
 	mdelay(1);
 
 	gpio_direction_output(S5PV210_GPB(0), 1);
@@ -2076,7 +2058,7 @@ static int smdkc110_cam1_power(int onoff)
 	mdelay(1);
 
 	gpio_free(S5PV210_GPB(0));
-	
+
 	mdelay(1);
 
 	/* CAM_VGA_nRST - GPB(2) */
@@ -2198,14 +2180,6 @@ static int s5ka3dfx_request_gpio(void)
 
 static int s5ka3dfx_power_init(void)
 {
-	/*if (IS_ERR_OR_NULL(s5ka3dfx_vga_avdd))
-		s5ka3dfx_vga_avdd = regulator_get(NULL, "vga_avdd");
-
-	if (IS_ERR_OR_NULL(s5ka3dfx_vga_avdd)) {
-		pr_err("Failed to get regulator vga_avdd\n");
-		return -EINVAL;
-	}*/
-
 	if (IS_ERR_OR_NULL(s5ka3dfx_vga_vddio))
 		s5ka3dfx_vga_vddio = regulator_get(NULL, "vga_vddio");
 
@@ -2244,13 +2218,6 @@ static int s5ka3dfx_power_on(void)
 	}
 
 	s5ka3dfx_request_gpio();
-	/* Turn VGA_AVDD_2.8V on */
-	/*err = regulator_enable(s5ka3dfx_vga_avdd);
-	if (err) {
-		pr_err("Failed to enable regulator vga_avdd\n");
-		return -EINVAL;
-	}
-	msleep(3);*/
 	// Turn CAM_ISP_SYS_2.8V on
 	gpio_direction_output(GPIO_GPB7, 0);
 	gpio_set_value(GPIO_GPB7, 1);
@@ -2314,12 +2281,6 @@ off_vga_dvdd:
 		pr_err("Failed to disable regulator vga_vddio\n");
 		result = err;
 	}
-/*off_vga_vddio:
-	err = regulator_disable(s5ka3dfx_vga_avdd);
-	if (err) {
-		pr_err("Failed to disable regulator vga_avdd\n");
-		result = err;
-	}*/
 
 	return result;
 }
@@ -2328,7 +2289,7 @@ static int s5ka3dfx_power_off(void)
 {
 	int err;
 
-	if (/*!s5ka3dfx_vga_avdd ||*/ !s5ka3dfx_vga_vddio ||
+	if (!s5ka3dfx_vga_vddio ||
 		!s5ka3dfx_cam_isp_host || !s5ka3dfx_vga_dvdd) {
 		pr_err("Faild to get all regulator\n");
 		return -EINVAL;
@@ -2370,13 +2331,6 @@ static int s5ka3dfx_power_off(void)
 	gpio_set_value(GPIO_CAM_VGA_nSTBY, 0);
 
 	udelay(1);
-
-	/* Turn VGA_AVDD_2.8V off */
-	/*err = regulator_disable(s5ka3dfx_vga_avdd);
-	if (err) {
-		pr_err("Failed to disable regulator vga_avdd\n");
-		return -EINVAL;
-	}*/
 
 	gpio_free(GPIO_GPB7);
 	gpio_free(GPIO_CAM_VGA_nRST);
@@ -3261,7 +3215,7 @@ static struct gpio_init_data aries_init_gpios[] = {
 		.pud	= S3C_GPIO_PULL_NONE,
 		.drv	= S3C_GPIO_DRVSTR_1X,
 	}, 
-	
+
 	// GPE0 ----------------------------
 	{
 		.num	= S5PV210_GPE0(0), // GPIO_CAM_PCLK
@@ -5207,9 +5161,9 @@ static struct platform_device *aries_devices[] __initdata = {
 #endif
 
 #ifndef CONFIG_HAS_BROKEN_SD
-#ifdef CONFIG_S3C_DEV_HSMMC
-	&s3c_device_hsmmc0,
-#endif
+	#ifdef CONFIG_S3C_DEV_HSMMC
+		&s3c_device_hsmmc0,
+	#endif
 #endif
 #ifdef CONFIG_S3C_DEV_HSMMC1
 	&s3c_device_hsmmc1,
@@ -5222,9 +5176,9 @@ static struct platform_device *aries_devices[] __initdata = {
 #endif
 
 #ifdef CONFIG_HAS_BROKEN_SD
-#ifdef CONFIG_S3C_DEV_HSMMC
-	&s3c_device_hsmmc0,
-#endif
+	#ifdef CONFIG_S3C_DEV_HSMMC
+		&s3c_device_hsmmc0,
+	#endif
 #endif
 #ifdef CONFIG_VIDEO_TV20
         &s5p_device_tvout,
@@ -5759,9 +5713,6 @@ void otg_host_phy_init(void)
 // from galaxy tab otg host:
 	__raw_writel((__raw_readl(S3C_USBOTG_PHYPWR)
 		&~(0x3<<3)&~(0x1<<0))|(0x1<<5), S3C_USBOTG_PHYPWR);
-// from galaxy s2 otg host:
-//	__raw_writel((__raw_readl(S3C_USBOTG_PHYPWR)
-//        	&~(0x7<<3)&~(0x1<<0)), S3C_USBOTG_PHYPWR);
 
 	__raw_writel((__raw_readl(S3C_USBOTG_PHYCLK)
 		&~(0x1<<4))|(0x7<<0), S3C_USBOTG_PHYCLK);
@@ -5786,7 +5737,6 @@ void otg_host_phy_init(void)
 		);
 }
 EXPORT_SYMBOL(otg_host_phy_init);
-
 
 #endif
 

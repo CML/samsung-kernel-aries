@@ -133,7 +133,7 @@ static inline void _wake_lock_timeout(struct svnet *sn)
 		wake_lock_timeout(&sn->wlock, sn->wake_time);
 }
 
-void _non_fmt_wakelock_timeout() {
+void _non_fmt_wakelock_timeout(void) {
 	if (svnet_dev)
 		_wake_lock_timeout(svnet_dev);
 }
@@ -145,7 +145,7 @@ static inline void _wake_process_lock_timeout(struct svnet *sn)
 		wake_lock_timeout(&sn->wlock, sn->wake_process_time);
 }
 
-void _fmt_wakelock_timeout() {
+void _fmt_wakelock_timeout(void) {
 	if (svnet_dev)
 		_wake_process_lock_timeout(svnet_dev);
 }

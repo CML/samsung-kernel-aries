@@ -1783,7 +1783,6 @@ void Si4709_work_func(struct work_struct *work)
 	u8 group_type;
 #endif
 	debug_rds("%s",__func__);
-//	mutex_lock(&(Si4709_dev.lock)); 
 	
 	if( Si4709_dev.valid == eFALSE )
     {
