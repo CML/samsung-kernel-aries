@@ -407,7 +407,6 @@ static ssize_t store_##file_name					\
 	return ret ? ret : count;					\
 }
 
-//store_one(scaling_min_freq, min);
 store_one(scaling_max_freq, max);
 
 static ssize_t store_scaling_min_freq

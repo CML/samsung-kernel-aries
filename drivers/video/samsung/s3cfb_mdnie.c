@@ -50,9 +50,6 @@ static void __iomem *s3c_mdnie_base;
 #define s3c_mdnie_readl(addr)             __raw_readl((s3c_mdnie_base + addr))
 #define s3c_mdnie_writel(val,addr)        __raw_writel(val,(s3c_mdnie_base + addr))
 
-
-static char banner[] __initdata = KERN_INFO "S3C MDNIE Driver, (c) 2010 Samsung Electronics\n";
-
 struct clk		*mdnie_clock;
 
 #define DEBUG_MDNIE
@@ -392,13 +389,9 @@ EXPORT_SYMBOL(mDNIe_txtbuf_to_parsing_for_lightsensor);
 
 #endif
 
-
-
 int s3c_mdnie_hw_init(void)
 {
 	printk("MDNIE  INIT ..........\n");
-
-	printk(banner);
 
         s3c_mdnie_mem = request_mem_region(S3C_MDNIE_PHY_BASE,S3C_MDNIE_MAP_SIZE,"mdnie");
         if(s3c_mdnie_mem == NULL) {
@@ -413,10 +406,6 @@ int s3c_mdnie_hw_init(void)
         }
 
 	/* clock */
-
-//	mdnie_clock = clk_get(NULL,"mdnie");
-//	mdnie_clock = clk_get(NULL,"mdnie_sel");
-//	mdnie_clock = clk_get(NULL,"mout_mdnie_pwm");
 	mdnie_clock = clk_get(NULL,"sclk_mdnie");
 
 	if (IS_ERR(mdnie_clock)) {
@@ -611,9 +600,8 @@ EXPORT_SYMBOL(mDNIe_Mode_Set);
 static ssize_t mdnieset_ui_file_cmd_show(struct device *dev,
         struct device_attribute *attr, char *buf)
 {
-	printk("called %s \n",__func__);
-
 	int mdnie_ui = 0;
+	printk("called %s \n",__func__);
 
 	switch(current_mDNIe_UI)
 	{

@@ -52,27 +52,21 @@ static void __iomem *s3c_ielcd_base;
 static struct s3cfb_global ielcd_fb;
 static struct s3cfb_global *ielcd_fbdev;
 
-
-
-static char banner[] __initdata = KERN_INFO "S3C IELCD Driver, (c) 2010 Samsung Electronics\n";
-
 int s3c_ielcd_hw_init(void)
 {
 	printk("IELCD  INIT ..........\n");
 
-	printk(banner);
+    s3c_ielcd_mem = request_mem_region(S3C_IELCD_PHY_BASE,S3C_IELCD_MAP_SIZE,"ielcd");
+    if(s3c_ielcd_mem == NULL) {
+            printk(KERN_ERR "IELCD: failed to reserved memory region\n");
+            return -ENOENT;
+    }
 
-        s3c_ielcd_mem = request_mem_region(S3C_IELCD_PHY_BASE,S3C_IELCD_MAP_SIZE,"ielcd");
-        if(s3c_ielcd_mem == NULL) {
-                printk(KERN_ERR "IELCD: failed to reserved memory region\n");
-                return -ENOENT;
-        }
-
-        s3c_ielcd_base = ioremap(S3C_IELCD_PHY_BASE,S3C_IELCD_MAP_SIZE);
-        if(s3c_ielcd_base == NULL) {
-                printk(KERN_ERR "IELCD failed ioremap\n");
-                return -ENOENT;
-        }
+    s3c_ielcd_base = ioremap(S3C_IELCD_PHY_BASE,S3C_IELCD_MAP_SIZE);
+    if(s3c_ielcd_base == NULL) {
+            printk(KERN_ERR "IELCD failed ioremap\n");
+            return -ENOENT;
+    }
 
 	printk("IELCD  INIT SUCCESS Addr : 0x%p\n",s3c_ielcd_base);
 
@@ -179,8 +173,3 @@ int s3c_ielcd_set_clock(struct s3cfb_global *ctrl)
 	//clk_enable(ielcd_clock);
 	return 0;
 }
-
-
-//module_init(s3c_ielcd_hw_init);
-
-

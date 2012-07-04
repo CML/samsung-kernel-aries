@@ -65,16 +65,6 @@ struct tl2796_gamma_reg_offsets {
 	s16 v[3][6];
 };
 
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-typedef enum {
-	BACKLIGHT_LEVEL_OFF	= 0,
-	BACKLIGHT_LEVEL_DIMMING	= 1,
-	BACKLIGHT_LEVEL_NORMAL	= 6
-} backlight_level_t;
-
-backlight_level_t backlight_level = BACKLIGHT_LEVEL_OFF;
-#endif*/
-
 struct s5p_lcd{
 	int ldi_enable;
 	int bl;
@@ -255,6 +245,9 @@ static void setup_gamma_regs(struct s5p_lcd *lcd, u16 gamma_regs[])
 {
 	int c, i;
 	u8 brightness = lcd->bl;
+#ifndef CONFIG_FB_VOODOO
+	u32 scaled_offset = 0;
+#endif
 	const struct tl2796_gamma_adj_points *bv = lcd->gamma_adj_points;
 	for (c = 0; c < 3; c++) {
 		u32 adj;
@@ -366,6 +359,7 @@ static int s6e63m0_spi_write_driver(struct s5p_lcd *lcd, u16 reg)
 
 	return ret ;
 }
+#ifdef CONFIG_FB_VOODOO_DEBUG_LOG
 static void print_decoded_commands(short unsigned int commands_record[], int i)
 {
     printk("Super AMOLED commands decoding:\n");
@@ -385,6 +379,7 @@ static void print_decoded_commands(short unsigned int commands_record[], int i)
                  commands_record[14]-256, commands_record[15]-256, commands_record[16]-256);
     }
 }
+#endif
 
 static void s6e63m0_panel_send_sequence(struct s5p_lcd *lcd,
 	const u16 *wbuf)
@@ -465,9 +460,6 @@ static void tl2796_ldi_disable(struct s5p_lcd *lcd)
 
 static int s5p_bl_update_status(struct backlight_device *bd)
 {
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-    backlight_level = BACKLIGHT_LEVEL_OFF;
-#endif*/
 	struct s5p_lcd *lcd = bl_get_data(bd);
 	int bl = bd->props.brightness;
 
@@ -920,14 +912,6 @@ return sprintf(buf, "%u\n", lcd_->color_mult[0]);
 #ifdef CONFIG_FB_VOODOO
 static ssize_t red_multiplier_original_show(struct device *dev, struct device_attribute *attr, char *buf)
 {
-/*#ifdef CONFIG_SAMSUNG_FASCINATE
-    if(bl == 0)
-            backlight_level = BACKLIGHT_LEVEL_OFF;	//lcd off
-    else if((bl < 30) && (bl > 0))
-            backlight_level = BACKLIGHT_LEVEL_DIMMING;	//dimming
-    else
-            backlight_level = BACKLIGHT_LEVEL_NORMAL;	//normal
-#endif*/
 	return sprintf(buf, "%u\n", original_color_adj_mults[0]);
 }
 #endif

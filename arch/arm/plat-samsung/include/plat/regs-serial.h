@@ -234,6 +234,7 @@
 #define NO_NEED_CHECK_CLKSRC	1
 
 #ifndef __ASSEMBLY__
+struct uart_port;
 
 /* struct s3c24xx_uart_clksrc
  *

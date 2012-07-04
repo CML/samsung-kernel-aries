@@ -59,7 +59,7 @@
 #include <linux/blx.h>
 #endif
 
-#define POLLING_INTERVAL	1000
+#define POLLING_INTERVAL	30000
 #define ADC_TOTAL_COUNT		10
 #define ADC_DATA_ARR_SIZE	6
 
@@ -267,9 +267,10 @@ static int s3c_bat_get_property(struct power_supply *bat_ps,
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
 	case POWER_SUPPLY_PROP_CAPACITY:
 		if (chg->pdata && chg->pdata->psy_fuelgauge &&
-			 chg->pdata->psy_fuelgauge->get_property &&
-			 chg->pdata->psy_fuelgauge->get_property(
-				chg->pdata->psy_fuelgauge, psp, val) < 0)
+			chg->pdata->psy_fuelgauge->get_property &&
+			chg->pdata->psy_fuelgauge->get_property(chg->pdata->psy_fuelgauge,
+													psp,
+													val) < 0)
 			return -EINVAL;
 		break;
 	case POWER_SUPPLY_PROP_TECHNOLOGY:
@@ -479,11 +480,11 @@ static void s3c_bat_discharge_reason(struct chg_data *chg)
 
 #ifdef CONFIG_BLX
 	if (get_charginglimit() != MAX_CHARGINGLIMIT && chg->bat_info.batt_soc >= get_charginglimit())
-	    {
+	{
 		chg->bat_info.dis_reason |= DISCONNECT_BAT_FULL;
 
 		chg->bat_info.batt_is_full = true;
-	    }
+	}
 #endif
 
 	if (chg->bat_info.batt_health != POWER_SUPPLY_HEALTH_GOOD)
@@ -721,8 +722,6 @@ static ssize_t s3c_bat_show_attrs(struct device *dev,
 static ssize_t s3c_bat_store_attrs(struct device *dev, struct device_attribute *attr,
 				   const char *buf, size_t count)
 {
-//	struct power_supply *psy = dev_get_drvdata(dev);
-//	struct chg_data *chg = container_of(psy, struct chg_data, psy_bat);
 	int x = 0;
 	int ret = 0;
 	const ptrdiff_t off = attr - s3c_battery_attrs;
