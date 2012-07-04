@@ -70,6 +70,13 @@ echo; echo "cleaning init.d from known files..."
 	./sbin/clean_initd.sh
 fi
 
+
+touch /data/local/devil/bigmem
+touch /data/local/devil/zram_size
+touch /data/local/devil/screen_off_min
+touch /data/local/devil/screen_off_max
+touch /data/local/devil/governor
+
 # load datafix
 if [ -e "/data/local/devil/datafix" ]; then
 	if [ -f /data/local/datafix ]; then
@@ -187,7 +194,9 @@ if [ -e "/data/local/devil/user_min_max_enable" ];then
 			elif $BB [ "$screen_off_max" -eq 1200000 ];then echo "CPU: found vaild screen_off_max: <$screen_off_max>" 
 			elif $BB [ "$screen_off_max" -eq 1000000 ];then echo "CPU: found vaild screen_off_max: <$screen_off_max>"
 			elif $BB [ "$screen_off_max" -eq 800000 ];then echo "CPU: found vaild screen_off_max: <$screen_off_max>" 
-			elif $BB [ "$screen_off_max" -eq 400000 ];then echo "CPU: found vaild screen_off_max: <$screen_off_max>"   			else
+			elif $BB [ "$screen_off_max" -eq 400000 ];then echo "CPU: found vaild screen_off_max: <$screen_off_max>"
+
+   			else
 			echo "CPU: did not find vaild screen_off_max, setting 1000 Mhz as default"
 			screen_off_max=1000000
 		fi
@@ -443,6 +452,24 @@ else
 fi
 
 
+# governor
+echo; echo "governor"
+if [ -e "/data/local/devil/governor" ];then
+    governor=`cat /data/local/devil/governor`
+	if grep -q $governor /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors ;then
+    		echo $governor > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    		echo "governor set to: $governor"
+	else
+    		echo "did not find vaild governor: doing nothing"
+    		governor=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`
+    		echo "your current governor is: $governor"	
+	fi
+else
+    	echo "did not find governor config file: doing nothing"
+    	governor=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`
+    	echo "your current governor is: $governor"
+fi
+
 
 # init.d support 
 # executes <0-9><0-9>scriptname, <E>scriptname, <S>scriptname 
@@ -521,10 +548,13 @@ if [ -e "/data/local/devil/swappiness" ];then
     		echo $swappiness > /proc/sys/vm/swappiness
 	else
 		echo "swappiness: value has to be betwenn 0 and 100"
+		swappiness=`cat /proc/sys/vm/swappiness`
+		echo $swappiness > /data/local/devil/swappiness
+		echo "swappiness set to: $swappiness"
 	fi
 else
 swappiness=`cat /proc/sys/vm/swappiness`
-echo $swapiness > /data/local/devil/swappiness
+echo $swappiness > /data/local/devil/swappiness
 fi
 cat_msg_sysfile "swappiness: " /proc/sys/vm/swappiness  
 

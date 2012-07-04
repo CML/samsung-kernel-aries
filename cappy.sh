@@ -36,9 +36,22 @@ mv init/version.c init/version.backup
 mv init/version.neu init/version.c
 echo "building kernel"
 
-if [ "$handy" = "cappy"  ] 
-then
 make aries_captivatemtd_defconfig
+
+if [ "$scheduler" = "BFS"  ]
+then
+	sed -i 's/^.*SCHED_BFS.*$//' .config
+	echo 'CONFIG_SCHED_BFS=y' >> .config
+else
+	sed -i 's/^.*SCHED_BFS.*$//' .config
+echo 'CONFIG_SCHED_BFS=n
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_FAIR_GROUP_SCHED=y
+CONFIG_RT_GROUP_SCHED=y
+CONFIG_SCHED_AUTOGROUP=y
+# CONFIG_CFS_BANDWIDTH is not set
+# CONFIG_RCU_TORTURE_TEST is not set' >> .config
 fi
 
 ################################### Config ###############################################################
@@ -85,10 +98,24 @@ mv init/version.c init/version.backup
 mv init/version.neu init/version.c
 echo "building kernel"
 
-if [ "$handy" = "cappy"  ] 
-then
 make aries_captivatemtd_defconfig
+
+if [ "$scheduler" = "BFS"  ]
+then
+	sed -i 's/^.*SCHED_BFS.*$//' .config
+	echo 'CONFIG_SCHED_BFS=y' >> .config
+else
+	sed -i 's/^.*SCHED_BFS.*$//' .config
+echo 'CONFIG_SCHED_BFS=n
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_FAIR_GROUP_SCHED=y
+CONFIG_RT_GROUP_SCHED=y
+CONFIG_SCHED_AUTOGROUP=y
+# CONFIG_CFS_BANDWIDTH is not set
+# CONFIG_RCU_TORTURE_TEST is not set' >> .config
 fi
+
 ################################### Config ###############################################################
 sed -i 's/^.*FB_VOODOO.*$//' .config
 echo 'CONFIG_FB_VOODOO=y
