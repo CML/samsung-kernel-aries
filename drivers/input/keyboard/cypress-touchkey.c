@@ -57,7 +57,6 @@ void touch_key_set_int_flt( unsigned long width );
 
 int bl_on = 0;
 static DEFINE_SEMAPHORE(enable_sem);
-static DEFINE_SEMAPHORE(i2c_sem);
 
 struct cypress_touchkey_devdata *bl_devdata;
 
@@ -89,8 +88,6 @@ static int i2c_touchkey_read_byte(struct cypress_touchkey_devdata *devdata,
 	int ret;
 	int retry = 2;
 
-	down(&i2c_sem);
-
 	while (true) {
 		ret = i2c_smbus_read_byte(devdata->client);
 		if (ret >= 0) {
@@ -106,8 +103,6 @@ static int i2c_touchkey_read_byte(struct cypress_touchkey_devdata *devdata,
 		msleep(10);
 	}
 
-	up(&i2c_sem);
-
 	return ret;
 }
 
@@ -116,8 +111,6 @@ static int i2c_touchkey_write_byte(struct cypress_touchkey_devdata *devdata,
 {
 	int ret;
 	int retry = 2;
-
-	down(&i2c_sem);
 
 	while (true) {
 		ret = i2c_smbus_write_byte(devdata->client, val);
@@ -132,8 +125,6 @@ static int i2c_touchkey_write_byte(struct cypress_touchkey_devdata *devdata,
         }
 		msleep(10);
 	}
-
-	up(&i2c_sem);
 
 	return ret;
 }
