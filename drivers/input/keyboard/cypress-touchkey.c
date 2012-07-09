@@ -57,7 +57,7 @@ void touch_key_set_int_flt( unsigned long width );
 
 int bl_on = 0;
 static DEFINE_SEMAPHORE(enable_sem);
-//static DEFINE_SEMAPHORE(i2c_sem);
+static DEFINE_SEMAPHORE(i2c_sem);
 
 struct cypress_touchkey_devdata *bl_devdata;
 
@@ -89,7 +89,7 @@ static int i2c_touchkey_read_byte(struct cypress_touchkey_devdata *devdata,
 	int ret;
 	int retry = 2;
 
-//	down(&i2c_sem);
+	down(&i2c_sem);
 
 	while (true) {
 		ret = i2c_smbus_read_byte(devdata->client);
@@ -106,7 +106,7 @@ static int i2c_touchkey_read_byte(struct cypress_touchkey_devdata *devdata,
 		msleep(10);
 	}
 
-//	up(&i2c_sem);
+	up(&i2c_sem);
 
 	return ret;
 }
@@ -117,7 +117,7 @@ static int i2c_touchkey_write_byte(struct cypress_touchkey_devdata *devdata,
 	int ret;
 	int retry = 2;
 
-//	down(&i2c_sem);
+	down(&i2c_sem);
 
 	while (true) {
 		ret = i2c_smbus_write_byte(devdata->client, val);
@@ -133,7 +133,7 @@ static int i2c_touchkey_write_byte(struct cypress_touchkey_devdata *devdata,
 		msleep(10);
 	}
 
-//	up(&i2c_sem);
+	up(&i2c_sem);
 
 	return ret;
 }
@@ -163,7 +163,7 @@ void bl_timer_callback(unsigned long data)
 	schedule_work(&bl_off_work);
 }
 
-static void bl_set_timeout() {
+static void bl_set_timeout(void) {
 	if (bl_timeout > 0) {
 		mod_timer(&bl_timer, jiffies + msecs_to_jiffies(bl_timeout));
 	}
@@ -195,10 +195,10 @@ static int recovery_routine(struct cypress_touchkey_devdata *devdata)
 		ret = i2c_touchkey_read_byte(devdata, &data);
 		if (!ret) {
 			if (!devdata->is_sleeping)
-		      	{
+		    {
          		enable_irq(irq_eint);
         		touch_key_set_int_flt( touch_int_flt_width );
-      			}
+      		}
 			goto out;
 		}
 		dev_err(&devdata->client->dev, "%s: i2c transfer error retry = "

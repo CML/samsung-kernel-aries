@@ -56,8 +56,6 @@
 
 bool _dockredir = false;
 
-//extern const u16 wm8994_reg_defaults[WM8994_CACHE_SIZE];
-
 /*
  *Definitions of clock related.
 */
@@ -110,15 +108,6 @@ static struct {
 	{ 32,  8  },
 	{ 48,  9  },
 };
-
-//struct snd_soc_dai wm8994_dai;
-//EXPORT_SYMBOL_GPL(wm8994_dai);
-
-//struct snd_soc_codec_device soc_codec_dev_pcm_wm8994;
-//EXPORT_SYMBOL_GPL(soc_codec_dev_pcm_wm8994);
-
-//struct snd_soc_codec_device soc_codec_dev_wm8994;
-//EXPORT_SYMBOL_GPL(soc_codec_dev_wm8994);
 
 /*
  * Definitions of sound path
@@ -444,10 +433,6 @@ static int wm8994_set_path(struct snd_kcontrol *kcontrol,
 static int wm8994_get_fmradio_path(struct snd_kcontrol *kcontrol,
 	struct snd_ctl_elem_value *ucontrol)
 {
-	int pathnum = ucontrol->value.integer.value[0];
-
-	DEBUG_LOG("wm8994_get_fmradio_path : %d", pathnum);
-
 	return 0;
 }
 
@@ -845,11 +830,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 		case 8000:
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x2F00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x3126);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
@@ -859,11 +840,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x1F00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x86C2);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00E0);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00e5);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -872,11 +849,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x1F00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x3126);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -885,11 +858,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x1900);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0xE23E);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -898,11 +867,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x0F00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x86C2);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00E0);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00E5);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -911,11 +876,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x0F00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x3126);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -924,11 +885,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x0C00);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0xE23E);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -937,11 +894,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x0700);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x86C2);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00E0);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x00E5);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -950,11 +903,7 @@ static int configure_clock(struct snd_soc_codec *codec)
 			wm8994_write(codec, WM8994_FLL1_CONTROL_2, 0x0700);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_3, 0x3126);
 			wm8994_write(codec, WM8994_FLL1_CONTROL_5, 0x0C88);
-/*#ifdef CONFIG_PHONE_ARIES_CDMA
-			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0100);
-#else*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_4, 0x0105);
-/*#endif*/
 			wm8994_write(codec, WM8994_FLL1_CONTROL_1,
 				WM8994_FLL1_FRACN_ENA | WM8994_FLL1_ENA);
 			break;
@@ -983,67 +932,6 @@ static int configure_clock(struct snd_soc_codec *codec)
 	}
 
 	dev_dbg(codec->dev, "CLK_SYS is %dHz\n", wm8994->sysclk_rate);
-
-	return 0;
-}
-
-static int wm8994_set_bias_level(struct snd_soc_codec *codec,
-				 enum snd_soc_bias_level level)
-{
-	DEBUG_LOG("");
-
-	switch (level) {
-	case SND_SOC_BIAS_ON:
-	case SND_SOC_BIAS_PREPARE:
-		/* VMID=2*40k */
-		snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_1,
-				    WM8994_VMID_SEL_MASK, 0x2);
-		snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_2,
-				    WM8994_TSHUT_ENA, WM8994_TSHUT_ENA);
-		break;
-
-	case SND_SOC_BIAS_STANDBY:
-		if (codec->dapm.bias_level == SND_SOC_BIAS_OFF) {
-			/* Bring up VMID with fast soft start */
-			snd_soc_update_bits(codec, WM8994_ANTIPOP_2,
-					    WM8994_STARTUP_BIAS_ENA |
-					    WM8994_VMID_BUF_ENA |
-					    WM8994_VMID_RAMP_MASK |
-					    WM8994_BIAS_SRC,
-					    WM8994_STARTUP_BIAS_ENA |
-					    WM8994_VMID_BUF_ENA |
-					    WM8994_VMID_RAMP_MASK |
-					    WM8994_BIAS_SRC);
-			/* VMID=2*40k */
-			snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_1,
-					    WM8994_VMID_SEL_MASK |
-					    WM8994_BIAS_ENA,
-					    WM8994_BIAS_ENA | 0x2);
-
-			/* Switch to normal bias */
-			snd_soc_update_bits(codec, WM8994_ANTIPOP_2,
-					    WM8994_BIAS_SRC |
-					    WM8994_STARTUP_BIAS_ENA, 0);
-		}
-
-		/* VMID=2*240k */
-		snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_1,
-				    WM8994_VMID_SEL_MASK, 0x4);
-
-		snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_2,
-				    WM8994_TSHUT_ENA, 0);
-		break;
-
-	case SND_SOC_BIAS_OFF:
-		snd_soc_update_bits(codec, WM8994_ANTIPOP_1,
-				    WM8994_LINEOUT_VMID_BUF_ENA, 0);
-
-		snd_soc_update_bits(codec, WM8994_POWER_MANAGEMENT_1,
-				    WM8994_VMID_SEL_MASK | WM8994_BIAS_ENA, 0);
-		break;
-	}
-
-	codec->dapm.bias_level = level;
 
 	return 0;
 }
@@ -1307,33 +1195,6 @@ static int wm8994_hw_params(struct snd_pcm_substream *substream,
 	return 0;
 }
 
-static int wm8994_digital_mute(struct snd_soc_dai *codec_dai, int mute)
-{
-	struct snd_soc_codec *codec = codec_dai->codec;
-	int mute_reg;
-	int reg;
-
-	switch (codec_dai->id) {
-	case 1:
-		mute_reg = WM8994_AIF1_DAC1_FILTERS_1;
-		break;
-	case 2:
-		mute_reg = WM8994_AIF2_DAC_FILTERS_1;
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	if (mute)
-		reg = WM8994_AIF1DAC1_MUTE;
-	else
-		reg = 0;
-
-	snd_soc_update_bits(codec, mute_reg, WM8994_AIF1DAC1_MUTE, reg);
-
-	return 0;
-}
-
 static int wm8994_startup(struct snd_pcm_substream *substream,
 			  struct snd_soc_dai *codec_dai)
 {
@@ -1418,7 +1279,6 @@ static void wm8994_shutdown_codec(struct snd_pcm_substream *substream,
 	}
 }
 
-//static struct snd_soc_device *wm8994_socdev;
 static struct snd_soc_codec *wm8994_codec;
 
 #define WM8994_RATES SNDRV_PCM_RATE_44100
@@ -3094,9 +2954,6 @@ static int wm8994_readable(struct snd_soc_codec *codec, unsigned int reg)
 
 static int wm8994_volatile(struct snd_soc_codec *codec, unsigned int reg)
 {
-	//if (reg >= WM8994_CACHE_SIZE)
-	//	return 1;
-
 	switch (reg) {
 	case WM8994_SOFTWARE_RESET:
 	case WM8994_CHIP_REVISION:
@@ -3130,20 +2987,6 @@ static int wm8994_init(struct wm8994_priv *wm8994_private,
 
 	snd_soc_codec_set_drvdata(codec, wm8994);
 
-#if 0
-	mutex_init(&codec->mutex);
-	INIT_LIST_HEAD(&codec->dapm_widgets);
-	INIT_LIST_HEAD(&codec->dapm_paths);
-	codec->name = "WM8994";
-	codec->owner = THIS_MODULE;
-	codec->read = wm8994_read;
-	codec->write = wm8994_write;
-	codec->readable_register = wm8994_readable_register;
-	codec->reg_cache_size = WM8994_IRQ_POLARITY; /* Skip write sequencer */
-	codec->set_bias_level = NULL;
-	codec->dai = &wm8994_dai;
-	codec->num_dai = 1;
-#endif
 	wm8994->universal_playback_path = universal_wm8994_playback_paths;
 	wm8994->universal_voicecall_path = universal_wm8994_voicecall_paths;
 	wm8994->universal_mic_path = universal_wm8994_mic_paths;
@@ -3174,17 +3017,7 @@ static int wm8994_init(struct wm8994_priv *wm8994_private,
 
 	wm8994->hw_version = wm8994_read(codec, 0x100);
 
-	//wm8994_socdev->card->codec = codec;
 	wm8994_codec = codec;
-
-#if 0
-	ret = snd_soc_new_pcms(wm8994_socdev, SNDRV_DEFAULT_IDX1,
-			       SNDRV_DEFAULT_STR1);
-	if (ret < 0) {
-		DEBUG_LOG_ERR("failed to create pcms\n");
-		goto pcm_err;
-	}
-#endif
 
 	wm8994_add_controls(codec);
 	wm8994_add_widgets(codec);
@@ -3197,10 +3030,6 @@ static int wm8994_init(struct wm8994_priv *wm8994_private,
 	return ret;
 
 card_err:
-	//snd_soc_free_pcms(wm8994_socdev);
-	//snd_soc_dapm_free(wm8994_socdev);
-pcm_err:
-
 	return ret;
 }
 
@@ -3272,10 +3101,7 @@ static int wm8994_codec_probe(struct snd_soc_codec *codec)
 	wm8994_ldo_control(pdata, 1);
 
 	codec->hw_write = (hw_write_t) i2c_master_send;
-	//i2c_set_clientdata(i2c, wm8994_priv);
-	//codec->control_data = i2c;
 	codec->control_data = to_i2c_client(codec->dev);
-	//codec->dev = &i2c->dev;
 
 	ret = wm8994_init(wm8994_priv, pdata);
 #ifdef CONFIG_SND_WM8994_EXTENSIONS
@@ -3313,27 +3139,6 @@ static int  wm8994_codec_remove(struct snd_soc_codec *codec)
 	return 0;
 }
 
-#if 0
-/* power down chip */
-static int wm8994_remove(struct platform_device *pdev)
-{
-	//struct snd_soc_device *socdev = platform_get_drvdata(pdev);
-	struct snd_soc_codec *codec = wm8994_codec;
-
-	//snd_soc_free_pcms(socdev);
-	//snd_soc_dapm_free(socdev);
-
-#if defined(CONFIG_I2C) || defined(CONFIG_I2C_MODULE)
-	i2c_unregister_device(codec->control_data);
-	i2c_del_driver(&wm8994_i2c_driver);
-#endif
-
-	//kfree(codec->drvdata);
-
-	return 0;
-}
-#endif
-
 #ifdef CONFIG_PM
 static int wm8994_suspend(struct snd_soc_codec *codec, pm_message_t state)
 {
@@ -3370,38 +3175,6 @@ static int wm8994_resume(struct snd_soc_codec *codec)
 }
 #endif
 
-#if 0
-struct snd_soc_codec_device soc_codec_dev_wm8994 = {
-	.probe = wm8994_probe,
-	.remove = wm8994_remove,
-#ifdef CONFIG_PM
-	.suspend = wm8994_suspend,
-	.resume = wm8994_resume,
-#endif
-};
-#endif
-
-#if 0
-static int __init wm8994_modinit(void)
-{
-	int ret;
-	ret = snd_soc_register_dai(&wm8994_dai);
-	if (ret)
-		pr_err("..dai registration failed..\n");
-
-	return ret;
-}
-
-module_init(wm8994_modinit);
-
-static void __exit wm8994_exit(void)
-{
-	snd_soc_unregister_dai(&wm8994_dai);
-}
-
-module_exit(wm8994_exit);
-#endif
-
 static struct snd_soc_codec_driver soc_codec_dev_wm8994 = {
 	.probe =	wm8994_codec_probe,
 	.remove =	wm8994_codec_remove,
@@ -3411,11 +3184,7 @@ static struct snd_soc_codec_driver soc_codec_dev_wm8994 = {
 	.write =	wm8994_write,
 	.readable_register = wm8994_readable,
 	.volatile_register = wm8994_volatile,
-	//.set_bias_level = wm8994_set_bias_level,
-
 	.reg_cache_size = WM8994_IRQ_POLARITY,
-	//.reg_cache_size = WM8994_CACHE_SIZE,
-	//.reg_cache_default = wm8994_reg_defaults,
 	.reg_word_size = 2,
 	.compress_type = SND_SOC_RBTREE_COMPRESSION,
 };
